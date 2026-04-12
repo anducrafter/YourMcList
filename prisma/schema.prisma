@@ -1,0 +1,108 @@
+
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  image         String?
+  role          Role      @default(USER)
+  emailVerified DateTime?
+  accounts      Account[]
+  sessions      Session[]
+
+  servers McServer[]
+}
+
+model McServer {
+  serverid          String    @id @default(cuid())
+  servername           String  
+  ip                  String   
+  bedrock               Boolean   
+  servercountry         String 
+  description          String
+  config              String   
+  website           String?
+  discord          String?
+  instagram         String?
+  ticktock          String?
+  youtube          String?
+  versionMajor           Int?
+  versionMinor           Int?
+  approved           Boolean @default(true)
+  cheked             String?
+  icon                String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime?
+  userId        String    // New field to hold the owner's ID
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  history   McServerHistory[]
+  @@unique([ip])
+}
+
+
+
+model McServerHistory {
+  id            BigInt   @id @default(autoincrement())
+  serverid      String   
+  checkedAt     DateTime @default(now())
+  online        Boolean
+  playersOnline Int?
+  versionText   String?
+  server        McServer @relation(fields: [serverid], references: [serverid], onDelete: Cascade)
+  @@index([serverid, checkedAt])
+}
+
+model Account {
+  id                 String  @id @default(cuid())
+  userId             String
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?
+  access_token       String?
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?
+  session_state      String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+enum Role {
+  USER
+  ADMIN
+}

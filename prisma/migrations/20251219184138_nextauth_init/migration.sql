@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "McServer" ALTER COLUMN "cheked" DROP NOT NULL;
+
+-- AlterTable
+ALTER TABLE "McServerHistory" ALTER COLUMN "checkedAt" SET DEFAULT CURRENT_TIMESTAMP;
