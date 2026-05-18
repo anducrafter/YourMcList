@@ -5,37 +5,70 @@ import { useEffect, useMemo, useRef, useState } from "react";
 type Selection = {
   plugins: string[];
   gamemodes: string[];
- 
   mods: string[];
+  features: string[];
 };
+
+// 1. Define Props Interface
+interface MultiDropdownProps {
+  initialValue?: string; // Expects a JSON string like '{"plugins":["Geyser"],"gamemodes":["Survival"]}'
+}
 
 const DATA = {
-  plugins: ["Essentials", "WorldEdit", "LuckPerms", "Vault", "WorldEdit", "LuckPerms", "Vault", "WorldEdit", "LuckPerms", "Vault", "WorldEdit", "LuckPerms", "Vault", "WorldEdit", "LuckPerms", "Vault", "WorldEdit", "LuckPerms", "Vault","gaming"],
-  gamemodes: ["Survival", "Creative", "Skyblock", "PvP"],
- 
-  mods: ["OptiFine", "JEI", "JourneyMap", "Biomes O' Plenty"],
+  plugins: [
+    "Essentials", "WorldEdit", "Economy", "Land Claims", 
+    "Custom Enchants", "Cross-Play", "Jobs", "Auction House", 
+    "McMMO", "BattlePass", "Rankup", "Proximity Voice",
+    "VeinMiner", "ViaVersion", "PlaceholderAPI", "Geyser"
+  ],
+  gamemodes: [
+    "Survival", "SMP", "Vanilla", "Semi-Vanilla", "Hardcore", "Anarchy",
+    "Factions", "Lifesteal", "BoxPvP", "PvP", "KitPvP", "Practice",
+    "Skyblock", "OneBlock", "Prison", "Economy", "Earth", "Geopolitics", "Towny",
+    "Bedwars", "Skywars", "Hunger Games", "Parkour", "Creative", "Among Us",
+    "Chaos Cubed", "Bullet Hell", "Pixelmon", "Cobblemon", "Dungeon Crawler"
+  ],
+  mods: [
+    "JEI", "JourneyMap", "Biomes O' Plenty", "Create", 
+    "Cobblemon", "Pixelmon", "BetterMC", "Fabric", "Forge",
+    "Quilt", "Sodium", "Alex's Mobs"
+  ],
+  features: [
+    "No-Reset", "Community", "Events", "Tournaments", 
+    "Whitelisted", "No-Grief", "Adult-Only", "Cracked", 
+    "Java & Bedrock", "Seasonal", "Active Staff"
+  ]
 };
 
-const MultiDropdown = () => {
+const MultiDropdown = ({ initialValue }: MultiDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
-  const [selection, setSelection] = useState<Selection>({
-    plugins: [],
-    gamemodes: [],
-  
-    mods: [],
+  // 2. Initialize state by attempting to parse the initialValue
+  const [selection, setSelection] = useState<Selection>(() => {
+    if (initialValue) {
+      try {
+        return JSON.parse(initialValue);
+      } catch (e) {
+        console.error("Failed to parse initial selection:", e);
+      }
+    }
+    // Default fallback if no initialValue or parse fails
+    return {
+      plugins: [],
+      gamemodes: [],
+      mods: [],
+      features: [],
+    };
   });
 
-const jsonValue = useMemo(() => {
-  if (!selection || Object.values(selection).every(v => !v || v.length === 0)) {
-    return "";
-  }
+  const jsonValue = useMemo(() => {
+    if (!selection || Object.values(selection).every(v => !v || v.length === 0)) {
+      return "";
+    }
+    return JSON.stringify(selection);
+  }, [selection]);
 
-  return JSON.stringify(selection);
-}, [selection]);
-
-  // close on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node)) {
@@ -75,17 +108,15 @@ const jsonValue = useMemo(() => {
 
   return (
     <div ref={ref} className="relative w-full">
-      {/* hidden input for form submit */}
-      <input  required  type="hidden" name="config" value={jsonValue} />
+      <input required type="hidden" name="config" value={jsonValue} />
 
-      {/* visible input */}
       <div
-        onClick={() => setIsOpen(true)}
-        className="mt-2 flex min-h-[42px] w-full cursor-text flex-wrap items-center gap-2 rounded-lg border border-neutral-300 bg-white p-2 text-sm shadow-sm focus-within:border-black"
+        onClick={() => setIsOpen(!isOpen)}
+        className="mt-2 flex min-h-[42px] w-full cursor-pointer flex-wrap items-center gap-2 rounded-lg border border-neutral-300 bg-white p-2 text-sm shadow-sm focus-within:border-black transition-all"
       >
         {allTags.length === 0 && (
           <span className="text-neutral-400">
-            Select plugins, gamemode and mods
+            Select categories, gamemodes, mods & features...
           </span>
         )}
 
@@ -109,29 +140,29 @@ const jsonValue = useMemo(() => {
         ))}
       </div>
 
-      {/* dropdown */}
       {isOpen && (
-        <div className="absolute z-10 mt-2 w-full rounded-lg bg-white p-4 shadow-lg ring-1 ring-black ring-opacity-5">
-          <div className="grid grid-cols-3 gap-4 text-sm">
+        <div className="absolute z-50 mt-2 w-full rounded-lg bg-white p-4 shadow-xl ring-1 ring-black ring-opacity-5 max-h-[400px] overflow-y-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-sm">
             {(Object.keys(DATA) as Array<keyof Selection>).map(category => (
-              <div key={category}>
-                <div className="mb-2 font-semibold capitalize">
+              <div key={category} className="flex flex-col">
+                <div className="mb-2 font-bold uppercase tracking-wider text-neutral-500 text-[10px]">
                   {category}
                 </div>
                 <ul className="space-y-1">
                   {DATA[category].map(item => {
-                    const active = selection[category].includes(item);
+                    const active = selection[category]?.includes(item);
                     return (
                       <li key={item}>
                         <button
                           type="button"
-                          onMouseDown={() =>
-                            toggleItem(category, item)
-                          }
-                          className={`w-full rounded px-2 py-1 text-left ${
+                          onMouseDown={(e) => {
+                            e.preventDefault();
+                            toggleItem(category, item);
+                          }}
+                          className={`w-full rounded px-2 py-1.5 text-left transition-colors ${
                             active
-                              ? "bg-black text-white"
-                              : "hover:bg-gray-100"
+                              ? "bg-black text-white font-medium"
+                              : "hover:bg-neutral-100 text-neutral-700"
                           }`}
                         >
                           {item}

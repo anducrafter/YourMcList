@@ -1,81 +1,90 @@
-
 import { auth } from '@/auth'
-import { login } from '@/lib/actions/auth'
 import Link from 'next/link'
-import { ButtonSignOut } from './dynamic/ButtonSignOut'
 import { ButtonSign } from './dynamic/ButtonSign'
 import Image from "next/image";
-const   header = async () => {
+import { ButtonSignOut } from './dynamic/ButtonSignOut';
 
-  const session = await auth()
-  const newLocal = "/icon.png"
+const Header = async () => {
+  const session = await auth();
+  const iconPath = "/icon.png";
+
   return (
-   <>
- <div className="w-full  p-4 flex items-center justify-between shadow-lg">
-  <div className="flex items-center gap-3">
+    <header className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-100 shadow-sm">
+      <div className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
+        
+        {/* Logo Section */}
+        <div className="flex items-center">
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="relative overflow-hidden rounded-xl shadow-md group-hover:shadow-lg transition-all">
+              <Image
+                src={iconPath}
+                alt="Logo"
+                width={48}
+                height={48}
+                className="object-cover group-hover:scale-105 transition-transform"
+              />
+            </div>
+            <span className="font-black text-xl tracking-tight hidden sm:block">
+              YOUR<span className="text-gray-500">MCLIST</span>
+            </span>
+          </Link>
+        </div>
 
-        <Link href={"/"}>
+        {/* Navigation Section */}
+        <nav className="flex items-center gap-4">
+          {session ? (
+            <div className="flex items-center gap-3 sm:gap-6">
+              {/* Main Links */}
+              <div className="flex items-center gap-2 border-r border-gray-200 pr-4 sm:pr-6">
+                <Link
+                  href="/serverliste/search"
+                  className="text-sm font-semibold text-gray-600 hover:text-black transition-colors px-3 py-2"
+                >
+                  Browse
+                </Link>
+                <Link
+                  href="/serverliste/addserver"
+                  className="hidden md:block px-4 py-2 rounded-lg bg-black text-white text-sm font-bold hover:bg-zinc-800 transition-all shadow-sm active:scale-95"
+                >
+                  + Add Server
+                </Link>
+              </div>
 
-            <img
-      className="w-12 h-12 rounded-xl shadow"
-      src={newLocal}
-      alt="App Icon"
-      loading='lazy'
-    />
-    </Link>
+              {/* User Profile */}
+              <div className="flex items-center gap-3">
+                <div className="flex flex-col items-end hidden lg:flex">
+                  <p className="text-xs font-bold leading-none">{session.user?.name}</p>
+                  <p className="text-[10px] text-gray-500">Member</p>
+                </div>
+                <Link href="/profile" className="relative group">
+                  <Image
+                    src={session.user?.image || '/placeholder-user.png'}
+                    alt="User"
+                    width={40}
+                    height={40}
+                    className="rounded-full border-2 border-white shadow-sm group-hover:ring-2 group-hover:ring-black transition-all"
+                  />
+                  <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
+                </Link>
+              </div>
+                <ButtonSignOut></ButtonSignOut>
+            </div>
+          ) : (
+            <div className="flex items-center gap-4">
+              <Link
+                href="/serverliste/search"
+                className="text-sm font-semibold text-gray-600 hover:text-black px-3"
+              >
+                Browse
+              </Link>
+              <ButtonSign />
+            
+            </div>
+          )}
+        </nav>
+      </div>
+    </header>
+  );
+};
 
-  
-
-  </div>
-
-  <nav className="flex items-center gap-3 text-lg">
-
-
-{session ? (
-
-  <div className='flex gap-3'>
-      <Link
-      href="/serverliste/search"
-      className="px-4 py-2 rounded-xl  text-black  transition shadow-sm"
-    >
-      Search
-    </Link>
-
-    <Link href={"/"}>
-    </Link>
-<Image
-  src={session.user?.image!}
-  alt="User Image"
-  width={48}
-  height={48}
-  loading='lazy'
-  className='rounded-4xl'
-/>
-
-<div id='test'role="tooltip"   className='text-black absolute z-10 invisible inline-block w-80 text-sm text-body transition-opacity duration-300 bg-neutral-primary-soft border border-default rounded-base shadow-xs opacity-0"'>
-
-</div>
-
-
-
-    <Link
-      href="/serverliste/addserver"
-      className="px-4 py-2 rounded-xl bg-black text-white hover:bg-gray-900 transition shadow-sm"
-    >
-      Add Server
-    </Link>
-  </div>
-    
-): (
-<ButtonSign></ButtonSign>
-
-)}
-
-
-  </nav>
-</div>
-   </>
-  )
-}
-
-export default header
+export default Header;

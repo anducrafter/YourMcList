@@ -6,9 +6,9 @@ import React from 'react'
 
 export  const  ButtonSignOut = () => {
   return (
-       <button 
+       <button
      onClick={() => logout()}
-      className="px-4 py-2 rounded-xl bg-zinc-800 text-white hover:bg-zinc-700 transition"
+      className="px-4 py-2 rounded-xl bg-black text-white hover:bg-zinc-700 transition"
     >
       Signout
     </button>

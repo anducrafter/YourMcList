@@ -4,9 +4,18 @@ import COUNTRIES from "../countrys";
 
 const OPTIONS = COUNTRIES;
 
-const Dropdown = () => {
+// 1. Define an interface for the component props
+interface DropdownProps {
+  defaultValue?: string; // The '?' makes it optional
+}
+
+// 2. Destructure defaultValue and provide an empty string as a fallback
+const Dropdown = ({ defaultValue = "" }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [query, setQuery] = useState("");
+  
+  // 3. Initialize state with the defaultValue
+  const [query, setQuery] = useState(defaultValue);
+  
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   const filteredOptions = useMemo(() => {
@@ -24,7 +33,6 @@ const Dropdown = () => {
     close();
   };
 
-  // ✅ close on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -46,7 +54,7 @@ const Dropdown = () => {
       <input
         type="text"
         value={query}
-        placeholder="Search course"
+        placeholder="Search country"
         onFocus={open}
         name="servercountry"
         onChange={e => setQuery(e.target.value)}
@@ -55,17 +63,21 @@ const Dropdown = () => {
 
       {isOpen && (
         <ul className="absolute z-10 mt-2 w-full max-h-56 overflow-auto rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5">
-          {filteredOptions.map(option => (
-            <li key={option}>
-              <button
-                type="button"
-                onMouseDown={() => selectOption(option)}
-                className="block w-full px-4 py-2 text-left text-sm hover:bg-gray-100"
-              >
-                {option}
-              </button>
-            </li>
-          ))}
+          {filteredOptions.length > 0 ? (
+            filteredOptions.map(option => (
+              <li key={option}>
+                <button
+                  type="button"
+                  onMouseDown={() => selectOption(option)}
+                  className="block w-full px-4 py-2 text-left text-sm hover:bg-gray-100"
+                >
+                  {option}
+                </button>
+              </li>
+            ))
+          ) : (
+            <li className="px-4 py-2 text-sm text-gray-500">No results found</li>
+          )}
         </ul>
       )}
     </div>

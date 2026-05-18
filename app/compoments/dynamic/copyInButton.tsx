@@ -33,11 +33,11 @@ export default function CopyIpButton({ ip }: CopyIpButtonProps) {
       </div>
 
       <div className="mt-1 font-mono text-sm text-black break-all">
-        {ip ?? "Keine IP"}
+        {ip ?? "no IP"}
       </div>
 
       <div className="mt-2 text-xs text-neutral-500">
-        {copied ? "Kopiert" : "Klicken zum Kopieren"}
+        {copied ? "copy" : "click to copy"}
       </div>
     </button>
   );
