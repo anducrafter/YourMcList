@@ -28,7 +28,15 @@ For User, it helps to sort different Server and to find their new Home to play o
 
 ## Features
 
-#Sort function
--Sort for Votes and Players
-#
+* Sort function
+  - Sort for Votes and Players
+* Filter
+  - Filter for Countrys, Version, Bedrock or Java and Tags
+* Login with Google Auth
+* Onlineplayers
+  - it shows the current Players online and also on an diagram for up to the last 3 months
+* Editing
+  - The added Servers can be edited on the profile
+* Votes
+  - For server can be now voted, every IP can Vote for an Server every 24h. Also if added the votify KEY, it sends an votify request to the current server
 
