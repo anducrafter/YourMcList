@@ -21,15 +21,18 @@ const SearchList = async ({ query, tags, servercountry, version, page, sort }: P
 
   // Match the keys exactly to what SearchForm.tsx sends
   if (query?.trim()) {
+
     where.servername = { contains: query.trim(), mode: "insensitive" };
+    
   }
+  console.log(tags)
 
   if (servercountry?.trim()) {
     where.servercountry = { contains: servercountry.trim(), mode: "insensitive" };
   }
 
   if (tags?.trim()) {
-    where.config = { contains: tags.trim() };
+    where.config = { contains: tags.trim(), mode: "insensitive" };
   }
 
   if (version) {

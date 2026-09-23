@@ -44,10 +44,10 @@ export async function generateMetadata({ searchParams }: HomeProps): Promise<Met
 async function page({ searchParams }: HomeProps) {
     const params = await searchParams;
     
-    const search = params.search as string;
+    const search = params.query as string;
     const tags = params.tags as string;
-    const servercountry = params.country as string;
-    const version = params.versions as string;
+    const servercountry = params.servercountry as string;
+    const version = params.version as string;
     const page = params.page as string;
     const sort = params.sort as string
 

@@ -66,7 +66,7 @@ export default function RootLayout({
      {children}
   </main>
        
-        <footer className="">
+        <footer>
         
 <Footer></Footer>
      

@@ -2,7 +2,7 @@ import {NextResponse} from 'next/server'
 import type {NextRequest} from 'next/server'
 import {auth} from '@/auth'
 
-const protectedRoutes = ["/user-info"]
+const protectedRoutes = ["/user-info","/serverliste/addserver"]
 
 export default async function middelware(request: NextRequest){
     const session = await auth()
