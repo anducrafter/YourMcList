@@ -84,7 +84,7 @@ export default async function StartPage() {
             <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-neutral-400">Fresh Entries</h2>
             <p className="text-xl font-black text-black">Newest Arrivals</p>
           </div>
-          <Link href="/serverliste/search" className="text-xs font-bold border-b-2 border-black pb-1">View All</Link>
+          <Link href="/serverliste/search" className="text-lg font-bold border-b-2 border-black pb-1">View All</Link>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

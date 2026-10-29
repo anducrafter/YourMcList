@@ -25,14 +25,29 @@ const SearchList = async ({ query, tags, servercountry, version, page, sort }: P
     where.servername = { contains: query.trim(), mode: "insensitive" };
     
   }
-  console.log(tags)
+
 
   if (servercountry?.trim()) {
     where.servercountry = { contains: servercountry.trim(), mode: "insensitive" };
   }
 
   if (tags?.trim()) {
-    where.config = { contains: tags.trim(), mode: "insensitive" };
+    try {
+      const parsed = JSON.parse(tags) as Record<string, string[]>;
+
+      const conditions = Object.values(parsed)
+          .flat()
+          .filter(Boolean)
+          .map((tag) => ({
+            config: { contains: `"${tag}"`, mode: "insensitive" as const },
+          }));
+
+      if (conditions.length > 0) {
+        where.AND = conditions; // alle gewählten Tags müssen vorkommen
+      }
+    } catch {
+      // ungültiges JSON in der URL -> Filter ignorieren
+    }
   }
 
   if (version) {

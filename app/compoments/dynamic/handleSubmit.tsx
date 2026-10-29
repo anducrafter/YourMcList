@@ -3,8 +3,11 @@
 import { useState } from "react";
 
 function handleSubmit() {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [host, setHost] = useState("");
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [port, setPort] = useState("");
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async () => {

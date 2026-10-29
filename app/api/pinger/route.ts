@@ -21,8 +21,8 @@ export async function GET() {
     }
   });
 
-  const batchSize = 40; // Increased batch size for faster processing
-  const historyData = []; // Array to collect results for bulk insert
+  const batchSize = 40;
+  const historyData = [];
 
   for (let i = 0; i < servers.length; i += batchSize) {
     const batch = servers.slice(i, i + batchSize);
@@ -39,7 +39,6 @@ export async function GET() {
             port = parseInt(parts[1], 10);
           }
 
-          // We wait for the ping, but if it hangs, the try/catch handles it
           const res = await pingServer(server.ip, port, type) as PingResponse | null;
 
           const playerCount = res?.players?.online ?? 0;
