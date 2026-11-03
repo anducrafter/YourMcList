@@ -12,13 +12,14 @@ export default function PostForm() {
     const [title, setTitle] = useState('')
     const [beschreibung, setbeschreibung] = useState('')
     const [tags, settags] = useState('')
+    const [img, setimg] = useState('')
     const [content, setContent] = useState('')
     const [pending, startTransition] = useTransition()
     const router = useRouter()
 
     const save = () =>
         startTransition(async () => {
-            const slug = await createPost({ title, slug: slugify(title), content,beschreibung, tags })
+            const slug = await createPost({ title, img, slug: slugify(title), content,beschreibung, tags })
             router.push(`/blog/${slug}`)
         })
 
@@ -37,24 +38,36 @@ export default function PostForm() {
 
 
                 </div>
-                <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white  mx-20 mt-10 max-w-2xl">
+                <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white  mx-20 mt-5 max-w-2xl">
                     <input
                         value={beschreibung}
                         onChange={(e) => setbeschreibung(e.target.value)}
                         placeholder="beschreibung"
-                        className="w-full px-6 pt-8 pb-2 text-4xl font-black tracking-tight outline-none placeholder:text-gray-300 sm:px-12 border-2 border-gray-400 "
+                        className="w-full px-6 pt-8 pb-2 text-xl font-black tracking-tight outline-none placeholder:text-gray-300 sm:px-12 border-2 border-gray-400 "
                     />
 
 
 
                 </div>
 
-                <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white  mx-20 mt-10 max-w-2xl">
+                <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white  mx-20 mt-2 max-w-2xl">
                     <input
                         value={tags}
                         onChange={(e) => settags(e.target.value)}
                         placeholder="tags"
-                        className="w-full px-6 pt-8 pb-2 text-4xl font-black tracking-tight outline-none placeholder:text-gray-300 sm:px-12 border-2 border-gray-400 "
+                        className="w-full px-6 pt-8 pb-2 text-xl font-black tracking-tight outline-none placeholder:text-gray-300 sm:px-12 border-2 border-gray-400 "
+                    />
+
+
+
+                </div>
+
+                <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white  mx-20 mt-2 max-w-2xl">
+                    <input
+                        value={img}
+                        onChange={(e) => setimg(e.target.value)}
+                        placeholder="img url"
+                        className="w-full px-6 pt-8 pb-2 text-xl font-black tracking-tight outline-none placeholder:text-gray-300 sm:px-12 border-2 border-gray-400 "
                     />
 
 

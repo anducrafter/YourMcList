@@ -14,18 +14,14 @@ const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
     redirect("/blog")
    }
    const content = blog?.content;
-
     return (
-        <div className="max-w-3xl mx-auto p-6">
-            {/* Blog-Titel */}
+        <section className="max-w-3xl mx-auto p-6" about={"Content of Blog"} >
             <h1 className="text-3xl font-bold mb-6">{blog?.title}</h1>
-
-            {/* Tiptap HTML-Inhalt sicher anzeigen */}
-            <div
+            <article
                 className="simple-editor-content tiptap prose"
                 dangerouslySetInnerHTML={{ __html: blog?.content }}
-            />
-        </div>
+            ></article>
+        </section>
     );
 };
 

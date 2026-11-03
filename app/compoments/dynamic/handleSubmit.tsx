@@ -32,7 +32,6 @@ function handleSubmit() {
         return;
       }
 
-      // ✅ Server hinzufügen
     } catch {
       setError("Server nicht erreichbar.");
     }
