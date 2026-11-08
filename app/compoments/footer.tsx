@@ -27,10 +27,10 @@ const footer = () => {
         </div>
 
           <div className="flex flex-col gap-4">
-              <h4 className="font-semibold text-black">Blog</h4>
+              <h4 className="font-semibold text-black">More</h4>
               <ul className="flex flex-col gap-2 text-gray-600 text-sm">
                   <a href="/blog">Our Blog, find MC news</a>
-
+                  <a href="/forum">Our Forum</a>
               </ul>
           </div>
 

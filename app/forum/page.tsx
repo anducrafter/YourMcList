@@ -1,11 +1,25 @@
 import Link from "next/link";
 import CreateCategory from "@/app/forum/createCategory";
 import { prisma } from "@/lib/actions/prisma";
+import {auth} from "@/auth";
+import {Role} from "@/lib/generated/prisma/enums";
 
 async function Page() {
     const categories = await prisma.category.findMany({
 
     });
+    const session = await auth();
+    let admin;
+    let content;
+    if(session){
+        admin = await prisma.user.findUnique({where: {id: session?.user?.id}})
+    }
+
+
+    if(admin && admin.role == Role.ADMIN) {
+        content =   <CreateCategory />;
+    }
+
 
     // Map behält die Reihenfolge und vermeidet das Partial-Typing von Object.groupBy
     const grouped = new Map<string, typeof categories>();
@@ -18,7 +32,7 @@ async function Page() {
     return (
         <div className="mx-auto max-w-5xl space-y-10 px-4 py-12">
             <div className="flex flex-col items-center justify-center text-xl font-medium">
-                <CreateCategory />
+                {content}
 
 
                 <h1 className="font-bold text-2xl">THE YOURMCLIST FORUM</h1>

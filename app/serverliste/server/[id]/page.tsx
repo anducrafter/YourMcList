@@ -17,11 +17,9 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     description: `Join ${server.servername} — a Minecraft ${server.bedrock ? "Bedrock" : "Java"} server from ${server.servercountry}. IP: ${server.ip}`,
   };
 }
-
 const ServerPage = async ({ params }: { params: Promise<{ id: string }>; }) => {
   const { id } = await params;
   let ids = id.split("-")[0]
-
 
   const api = await prisma.mcServer.findUnique({
     where: { serverid: ids },
@@ -30,7 +28,6 @@ const ServerPage = async ({ params }: { params: Promise<{ id: string }>; }) => {
   const history = await prisma.mcServerHistory.findMany({
     where: { serverid: ids },
   });
-  console.log(history)
   const votes = await prisma.vote.count({
     where: {serverId: ids}
   })
