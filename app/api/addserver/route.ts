@@ -50,7 +50,7 @@ if (!res.ok) {
 const dataping = await res.json();
 const data: any = {};
 
-    data.servername =  formData.get("servername")?.toString()!
+    data.servername =  formData.get("servername")?.toString()
     data.ip =         serverip
     data.icon =        dataping.data.favicon
     data.bedrock =     bedrock

@@ -48,7 +48,7 @@ async function Page() {
                         {items.map((category) => (
                             <li key={category.id}>
                                 <Link
-                                    href={`/forum/${category.name.replace(" ","-")+"&"}${category.id}`}
+                                    href={`/forum/${category.name.replace(" ","-")+"_"}${category.id}`}
                                     className="group flex items-center justify-between gap-4 px-6 py-4 transition-colors hover:bg-neutral-50 focus-visible:bg-neutral-50 focus-visible:outline-none"
                                 >
                                     <div className="min-w-0">

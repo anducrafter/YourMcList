@@ -3,17 +3,14 @@ import {prisma} from "@/lib/actions/prisma";
 import {notFound, redirect} from "next/navigation";
 import {auth} from "@/auth";
 import Link from "next/link";
+import ListThreads from "@/app/forum/[slug]/listThreads";
 
-function gaming(){
-    return (
-        <div>hello world</div>
-    )
-}
+
 const Page  = async ({ params }: { params: Promise<{ slug: string }> }) => {
 
     const {slug}  = await params;
     const decoded = decodeURIComponent(slug);
-    const blognme = decoded.split("&")[1];
+    const blognme = decoded.split("_")[1];
     const user = await auth();
     if(blognme == undefined) {
         return redirect("/forum");
@@ -24,7 +21,7 @@ const Page  = async ({ params }: { params: Promise<{ slug: string }> }) => {
     }
     const threads = await prisma.thread.findMany({where:{categoryId: category1.id}});
     console.log(threads);
-    const b = threads.length < 0;
+    const b = threads.length > 0;
 
     return (
         <>
@@ -40,7 +37,7 @@ const Page  = async ({ params }: { params: Promise<{ slug: string }> }) => {
 
             {user ? (
                 <section title={"create Thread"} className="flex w-full flex-col items-center justify-center gap-2 p-5 text-center">
-               <Link href={decoded+"/post"} className="text-xl font-semibold tracking-tight text-white bg-black p-5 rounded-lg">
+               <Link href={"post?category="+decoded} className="text-xl font-semibold tracking-tight text-white bg-black p-5 rounded-lg">
                    Create thread
                </Link>
                 </section>
@@ -48,14 +45,16 @@ const Page  = async ({ params }: { params: Promise<{ slug: string }> }) => {
                <></>
             )}
 
-            {b ?  (
-                threads.map((thread, i) => {
-                    <div>
-                        {thread.title}
-                    </div>
-                })
+            {threads.length > 0 ? (
+                <ul className="mx-auto flex w-full max-w-3xl flex-col gap-3 p-5">
+                    {threads.map((thread) => (
+                        <li key={thread.id}>
+                            <ListThreads thread={thread}></ListThreads>
+                        </li>
+                    ))}
+                </ul>
             ) : (
-                <div>No content</div>
+                <div className="p-5 text-center">Noch keine Threads</div>
             )}
 
 
