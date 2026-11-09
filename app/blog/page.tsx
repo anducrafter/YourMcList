@@ -7,20 +7,20 @@ import {auth} from "@/auth";
 
 
 type NewsItem = {
-  id: string
-  img: string
-  slug: string
-    beschreibung: string
-  title: string
-  tags: string
-  content: string
-  published: boolean
-  createdAt: Date
-
+    id: string
+    img: string | null
+    slug: string
+    beschreibung: string | null
+    title: string
+    tags: string | null      // war: string
+    content: string
+    published: boolean
+    createdAt: Date
 }
 
-function NewsCard({ id,img,slug,beschreibung,tags,title,content,published,createdAt }: NewsItem) {
-    const tagList = tags.split(",").map((t) => t.trim()).filter(Boolean);
+
+function NewsCard({ img, slug, beschreibung, tags, title, createdAt }: NewsItem) {
+    const tagList = (tags ?? "").split(",").map((t) => t.trim()).filter(Boolean);
   return (
       <Link
           href={`/blog/${slug}`}
@@ -101,8 +101,6 @@ if(session) {
     });
     d = user?.role == Role.ADMIN;
 }
-    // @ts-ignore
-
 
 
 
