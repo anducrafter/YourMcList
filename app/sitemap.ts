@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/actions/prisma'
 import { MetadataRoute } from 'next'
+export const revalidate = 3600;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // 1. Alle Server abrufen
