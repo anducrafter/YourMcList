@@ -18,7 +18,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // 2. Statische Routen
   const staticRoutes = [
     { url: 'https://yourmclist.com', lastModified: new Date() },
-    { url: 'https://yourmclist.com/addserver', lastModified: new Date() },
+    { url: 'https://yourmclist.com/serverliste/addserver', lastModified: new Date() },
     { url: 'https://yourmclist.com/help/votify', lastModified: new Date() },
     { url: 'https://yourmclist.com/help/alredyadded', lastModified: new Date() },
     { url: 'https://yourmclist.com/help/contact', lastModified: new Date() },
